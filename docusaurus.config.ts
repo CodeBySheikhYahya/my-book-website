@@ -15,16 +15,15 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-username.github.io', // Update with your GitHub username
+  url: 'https://CodeBySheikhYahya.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  // For local development, use '/' - change to '/my-book-website/' when deploying to GitHub Pages
-  baseUrl: '/', // Use '/' for local, '/my-book-website/' for GitHub Pages
+  baseUrl: '/my-book-website/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'your-username', // Update with your GitHub username
-  projectName: 'my-book-website', // Update with your repo name
+  organizationName: 'CodeBySheikhYahya',
+  projectName: 'my-book-website',
 
   onBrokenLinks: 'throw',
 
@@ -43,7 +42,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           // Remove this to remove the "edit this page" links.
-          // editUrl: 'https://github.com/your-username/my-book-website/tree/main/',
+          editUrl: 'https://github.com/CodeBySheikhYahya/my-book-website/tree/main/',
         },
         blog: false, // Disable blog since you don't have blog folder
         theme: {
@@ -73,7 +72,7 @@ const config: Config = {
           label: 'Book',
         },
         {
-          href: 'https://github.com/your-username/my-book-website', // Update with your GitHub repo
+          href: 'https://github.com/CodeBySheikhYahya/my-book-website',
           label: 'GitHub',
           position: 'right',
         },
@@ -96,7 +95,7 @@ const config: Config = {
           items: [
             {
               label: 'GitHub',
-              href: 'https://github.com/your-username/my-book-website', // Update with your GitHub repo
+              href: 'https://github.com/CodeBySheikhYahya/my-book-website',
             },
           ],
         },
