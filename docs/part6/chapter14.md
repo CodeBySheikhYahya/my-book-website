@@ -461,3 +461,5 @@ if __name__ == '__main__':
 
 Now let's learn about the hardware you'll need! Move to [Part 7: Hardware and Setup Guide](../part7/chapter15)!
 
+
+

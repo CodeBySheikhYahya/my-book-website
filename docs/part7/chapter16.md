@@ -372,3 +372,5 @@ sudo apt install ros-humble-desktop
 
 Now let's learn about the learning schedule and how to structure your studies! Move to [Part 8: Learning Path and Schedule](../part8/chapter17)!
 
+
+

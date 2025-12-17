@@ -472,3 +472,5 @@ Robot receives voice command, plans actions, navigates, detects objects, and man
 
 Now let's explore advanced topics and the future of Physical AI! Move to [Part 10: Advanced Topics and Future](../part10/chapter19)!
 
+
+

@@ -374,3 +374,5 @@ ros2 launch isaac_ros_visual_slam isaac_ros_visual_slam.launch.py
 
 Now let's learn about robot navigation and path planning! Move to [Chapter 10: Robot Navigation and Path Planning](./chapter10)!
 
+
+

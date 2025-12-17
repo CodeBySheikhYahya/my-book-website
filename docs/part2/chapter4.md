@@ -407,3 +407,5 @@ rviz2  # ROS 2 visualization tool
 
 Now that you can connect Python to ROS 2, let's learn about simulation! Move to [Part 3: Creating Digital Twins (Simulation)](../part3/chapter5) to learn how to test your robots safely in virtual worlds!
 
+
+

@@ -271,3 +271,5 @@ This creates a node that just says "Hello ROS 2!"
 
 Now that you understand ROS 2 basics, let's learn how to connect your Python AI code to robots using rclpy. Move to [Chapter 4: Connecting Python AI to Robots](./chapter4)!
 
+
+

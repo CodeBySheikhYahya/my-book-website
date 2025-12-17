@@ -412,3 +412,5 @@ action_client.send_goal(goal)
 
 Now let's learn about Vision-Language-Action systems—combining AI language models with robots! Move to [Part 5: Vision-Language-Action (VLA)](../part5/chapter11)!
 
+
+

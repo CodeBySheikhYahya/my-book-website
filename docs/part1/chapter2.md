@@ -215,3 +215,5 @@ Here's how we'll work in this book:
 
 Now that you understand why simulation matters, let's start learning about ROS 2—the system that helps robots communicate and work together. Move to [Part 2: Building the Robot's Nervous System (ROS 2)](../part2/chapter3)!
 
+
+
