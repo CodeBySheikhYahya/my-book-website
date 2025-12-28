@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: Book Chatbot API
+  description: API for the book chatbot using Gemini and Qdrant
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+  - url: https://api.example.com
+    description: Production server (update with your actual URL)
+
+paths:
+  /:
+    get:
+      summary: API status
+      description: Check if the API is running
+      operationId: read_root
+      responses:
+        '200':
+          description: API is running
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Book Chatbot API is running"
+
+  /health:
+    get:
+      summary: Health check
+      description: Check API health status
+      operationId: health_check
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+                  service:
+                    type: string
+                    example: "book-chatbot-api"
+
+  /test-db:
+    get:
+      summary: Test database connection
+      description: Test the database connection and configuration
+      operationId: test_database
+      responses:
+        '200':
+          description: Database test result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  database_url_set:
+                    type: boolean
+                  database_url_preview:
+                    type: string
+                    nullable: true
+                  connection_test:
+                    type: string
+                    nullable: true
+                  error:
+                    type: string
+                    nullable: true
+
+  /chat:
+    post:
+      summary: Chat with the book
+      description: |
+        Answers questions about the book using RAG (Retrieval Augmented Generation).
+        Can use selected text for additional context.
+        Stores chat history in Neon Postgres.
+      operationId: chat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChatRequest'
+      responses:
+        '200':
+          description: Chat response with answer and sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /index:
+    post:
+      summary: Index all book content
+      description: |
+        Process all markdown files from the docs folder, create embeddings,
+        and index them in Qdrant. Run this once to set up the vector database.
+      operationId: index_books
+      responses:
+        '200':
+          description: Indexing completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Indexed 1234 chunks successfully"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /chat/history/{session_id}:
+    get:
+      summary: Get chat history
+      description: Retrieve chat history for a specific session
+      operationId: get_history
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          description: The session ID to retrieve history for
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          description: Maximum number of history items to return
+          schema:
+            type: integer
+            default: 10
+            minimum: 1
+            maximum: 100
+      responses:
+        '200':
+          description: Chat history retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id:
+                    type: string
+                  history:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChatHistoryItem'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    ChatRequest:
+      type: object
+      required:
+        - question
+      properties:
+        question:
+          type: string
+          description: The user's question about the book
+          example: "What is Physical AI?"
+        selected_text:
+          type: string
+          nullable: true
+          description: Optional selected text from the book for additional context
+          example: "Physical AI combines robotics and artificial intelligence..."
+        session_id:
+          type: string
+          nullable: true
+          description: Optional session ID for maintaining conversation history
+          example: "550e8400-e29b-41d4-a716-446655440000"
+
+    ChatResponse:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          type: string
+          description: The assistant's answer to the question
+          example: "Physical AI is a field that combines..."
+        sources:
+          type: array
+          nullable: true
+          description: Relevant sources from the book used to generate the answer
+          items:
+            $ref: '#/components/schemas/Source'
+        session_id:
+          type: string
+          nullable: true
+          description: The session ID for this conversation
+          example: "550e8400-e29b-41d4-a716-446655440000"
+
+    Source:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the source chapter or section
+          example: "Chapter 1: Introduction to Physical AI"
+        source:
+          type: string
+          description: File path or identifier of the source
+          example: "part1/chapter1.md"
+        text:
+          type: string
+          description: Excerpt from the source (truncated)
+          example: "Physical AI combines robotics and artificial intelligence to create..."
+
+    ChatHistoryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the chat entry
+        session_id:
+          type: string
+          description: Session ID this entry belongs to
+        question:
+          type: string
+          description: The user's question
+        answer:
+          type: string
+          description: The assistant's answer
+        selected_text:
+          type: string
+          nullable: true
+          description: Selected text if any
+        sources:
+          type: array
+          nullable: true
+          description: Sources used for the answer
+          items:
+            $ref: '#/components/schemas/Source'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the chat entry was created
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: Error message
+          example: "Error: Internal server error"
+

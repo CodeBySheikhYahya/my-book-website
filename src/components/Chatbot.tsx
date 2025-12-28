@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Chatbot.css';
+import { ApiClient, ChatRequest, ChatResponse } from '../api/client';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -23,6 +24,7 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
   const [selectedText, setSelectedText] = useState('');
   const [sessionId, setSessionId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const apiClient = new ApiClient(apiUrl);
 
   // Initialize session ID
   useEffect(() => {
@@ -64,19 +66,14 @@ export default function Chatbot({ apiUrl = 'http://localhost:8000' }: ChatbotPro
     setLoading(true);
 
     try {
-      const response = await fetch(`${apiUrl}/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          question: userMessage.content,
-          selected_text: selectedText || undefined,
-          session_id: sessionId || undefined,
-        }),
-      });
+      // Use the API client (generated from OpenAPI spec)
+      const request: ChatRequest = {
+        question: userMessage.content,
+        selected_text: selectedText || undefined,
+        session_id: sessionId || undefined,
+      };
 
-      const data = await response.json();
+      const data: ChatResponse = await apiClient.chat(request);
       
       // Store session ID if returned
       if (data.session_id && !sessionId) {
